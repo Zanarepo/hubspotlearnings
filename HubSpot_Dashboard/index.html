@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HubSpot Magic Dashboard</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Modular Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="brand">HubSpot <span>Magic Dashboard</span></div>
+        
+        <div class="nav-item" id="nav-roadmap" onclick="loadHub('roadmap')" style="margin-bottom: 1rem; border: 1px solid rgba(255,122,89,0.4); background: rgba(255,122,89,0.1);">
+            🗺️ Learning Roadmap
+        </div>
+
+        <div class="nav-section">The Core Engine</div>
+        <div class="nav-item" id="nav-marketing" onclick="loadHub('marketing')">📢 Marketing Hub</div>
+        <div class="nav-item" id="nav-sales" onclick="loadHub('sales')">💰 Sales Hub</div>
+        <div class="nav-item" id="nav-service" onclick="loadHub('service')">🩹 Service Hub</div>
+        <div class="nav-item" id="nav-cms" onclick="loadHub('cms')">🧱 CMS Hub</div>
+        <div class="nav-item" id="nav-operations" onclick="loadHub('operations')">🤖 Operations Hub</div>
+        
+        <div class="nav-section" style="margin-top: 1rem;">Automations</div>
+        <div class="nav-item" id="nav-workflows" onclick="loadHub('workflows')">⚡ Workflows Guide</div>
+    </nav>
+
+    <!-- Main Content Area where JS injects data dynamically -->
+    <main class="main" id="main-content">
+        <!-- Content gets rendered here by app.js -->
+    </main>
+
+    <!-- Modular JS Scripts -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>

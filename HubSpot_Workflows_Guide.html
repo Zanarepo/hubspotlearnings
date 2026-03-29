@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HubSpot Workflows Guide</title>
+    <!-- Modern Typeface -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Sleek Dark Mode Color Palette */
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #ff7a59;     /* Signature HubSpot Orange */
+            --primary-glow: rgba(255, 122, 89, 0.3);
+            --secondary: #0ea5e9;
+            --marketing: #ec4899;
+            --sales: #eab308;
+            --service: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Elements */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -200px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Typography & Headers */
+        header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        h1 span {
+            color: var(--primary);
+            -webkit-text-fill-color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--primary);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+
+        /* Hubs Grid (The Core Engine) */
+        .hubs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 6rem;
+        }
+
+        .hub-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .hub-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+
+        .hub-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hub-card:hover .hub-icon {
+            transform: scale(1.2);
+        }
+
+        .hub-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hub-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Workflows Grid */
+        .workflows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .workflow-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workflow-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .workflow-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .workflow-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+        }
+
+        .tag-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tag.marketing { background: rgba(236, 72, 153, 0.15); color: var(--marketing); border: 1px solid rgba(236, 72, 153, 0.3); }
+        .tag.sales { background: rgba(234, 179, 8, 0.15); color: var(--sales); border: 1px solid rgba(234, 179, 8, 0.3); }
+        .tag.service { background: rgba(16, 185, 129, 0.15); color: var(--service); border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .workflow-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .workflow-goal {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Interactive Timeline / Workflow Steps */
+        .step-list {
+            list-style: none;
+            position: relative;
+            flex-grow: 1;
+        }
+
+        .step-list::before {
+            content: '';
+            position: absolute;
+            left: 13px;
+            top: 15px;
+            bottom: 25px;
+            width: 2px;
+            background: rgba(255,255,255,0.1);
+            transition: background 0.3s ease;
+        }
+
+        .workflow-card:hover .step-list::before {
+            background: linear-gradient(to bottom, var(--primary) 0%, rgba(255,255,255,0.1) 100%);
+        }
+
+        .step-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .workflow-card:hover .step-icon:not(.step-icon-trigger) {
+            border-color: var(--text-main);
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .step-icon-trigger {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            background: rgba(14, 165, 233, 0.1);
+        }
+
+        .step-delay {
+            color: var(--primary);
+            font-style: italic;
+            font-size: 0.85rem;
+            padding-left: 3rem;
+            margin-bottom: 1.25rem;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .step-delay::before {
+            content: '⏱';
+            position: absolute;
+            left: 6px;
+            font-style: normal;
+            font-size: 1rem;
+            background: var(--bg-dark);
+            z-index: 1;
+            border-radius: 50%;
+        }
+        
+        .branch {
+            margin-top: 0.75rem;
+            padding-left: 1.25rem;
+            border-left: 2px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .branch-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .branch-pill {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+
+        .pill-yes { background: rgba(16, 185, 129, 0.2); color: var(--service); }
+        .pill-no { background: rgba(236, 72, 153, 0.2); color: var(--marketing); }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .container { padding: 3rem 1.5rem; }
+            .section-title { font-size: 2rem; }
+            .workflows-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background Blobs -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <div class="container">
+        <header>
+            <h1>Mastering <span>HubSpot</span></h1>
+            <p class="subtitle">A visual guide to the core hubs and the powerful automated workflows that drive growth, streamline operations, and enhance customer experience.</p>
+        </header>
+
+        <!-- Hubs Overview -->
+        <section>
+            <h2 class="section-title">The Core Engine</h2>
+            <div class="hubs-grid">
+                <div class="hub-card">
+                    <div class="hub-icon">🎯</div>
+                    <div class="hub-title">Marketing Hub</div>
+                    <div class="hub-desc">Lead generation, robust automation, email campaigns, and SEO.</div>
+                </div>
+                <div class="hub-card">
+                    <div class="hub-icon">💼</div>
+                    <div class="hub-title">Sales Hub</div>
+                    <div class="hub-desc">Advanced CRM, visual pipelines, scheduling, and deal tracking.</div>
+                </div>
+                <div class="hub-card">
+                    <div class="hub-icon">🤝</div>
+                    <div class="hub-title">Service Hub</div>
+                    <div class="hub-desc">Helpdesk ticketing, knowledge base, and satisfaction surveys.</div>
+                </div>
+                <div class="hub-card">
+                    <div class="hub-icon">🌐</div>
+                    <div class="hub-title">CMS Hub</div>
+                    <div class="hub-desc">Drag-and-drop website building directly integrated with the CRM.</div>
+                </div>
+                <div class="hub-card">
+                    <div class="hub-icon">⚙️</div>
+                    <div class="hub-title">Operations Hub</div>
+                    <div class="hub-desc">Seamless data synchronization and deep custom coding actions.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workflows Compilation -->
+        <section>
+            <h2 class="section-title">Essential Workflows</h2>
+            <div class="workflows-grid">
+
+                <!-- Workflow 1: Lead Nurturing -->
+                <div class="workflow-card">
+                    <div class="card-header">
+                        <div class="tag-group">
+                            <span class="tag marketing">Marketing</span>
+                        </div>
+                        <h3 class="workflow-title">Lead Nurturing</h3>
+                        <p class="workflow-goal">Educate a lead and transition them seamlessly down the sales funnel.</p>
+                    </div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-icon step-icon-trigger">⚡</div>
+                            <strong>Trigger:</strong> Form submission (eBook / Whitepaper)
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">1</div>
+                            Send immediate "Thank You & Download" Email
+                        </li>
+                        <div class="step-delay">Wait 3 Days</div>
+                        <li class="step-item">
+                            <div class="step-icon">2</div>
+                            Send follow-up educational email
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">?</div>
+                            <strong>Condition:</strong> Clicked a link in 2nd email?
+                            <div class="branch">
+                                <div class="branch-item"><span class="branch-pill pill-yes">YES</span> Increase Lead Score & Assign to Sales</div>
+                                <div class="branch-item"><span class="branch-pill pill-no">NO</span> Send secondary resource email</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Workflow 2: Onboarding -->
+                <div class="workflow-card">
+                    <div class="card-header">
+                        <div class="tag-group">
+                            <span class="tag marketing">Marketing</span>
+                            <span class="tag service">Service</span>
+                        </div>
+                        <h3 class="workflow-title">Welcome & Onboarding</h3>
+                        <p class="workflow-goal">Greet new users and provide immediate value to reduce churn.</p>
+                    </div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-icon step-icon-trigger">⚡</div>
+                            <strong>Trigger:</strong> New Subscriber or Free Trial Signup
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">1</div>
+                            Send "Welcome" email with top resources
+                        </li>
+                        <div class="step-delay">Wait 2 Days</div>
+                        <li class="step-item">
+                            <div class="step-icon">2</div>
+                            Send "Pro-Tips" highlighting core features
+                        </li>
+                        <div class="step-delay">Wait 3 Days</div>
+                        <li class="step-item">
+                            <div class="step-icon">3</div>
+                            Send personal check-in or webinar invite
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Workflow 3: Sales Routing -->
+                <div class="workflow-card">
+                    <div class="card-header">
+                        <div class="tag-group">
+                            <span class="tag sales">Sales</span>
+                        </div>
+                        <h3 class="workflow-title">Internal Lead Routing</h3>
+                        <p class="workflow-goal">Ensure high-value, hot leads are followed up with instantly.</p>
+                    </div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-icon step-icon-trigger">⚡</div>
+                            <strong>Trigger:</strong> Lead Score > 50 OR Views Pricing page 2+ times
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">1</div>
+                            Assign Contact to Rep (Round-robin logic)
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">2</div>
+                            Create "Call Lead" Task in CRM (Due in 24h)
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">3</div>
+                            Push notification to Rep via Slack/Email integration
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Workflow 4: Wake Up Campaign -->
+                <div class="workflow-card">
+                    <div class="card-header">
+                        <div class="tag-group">
+                            <span class="tag marketing">Marketing</span>
+                        </div>
+                        <h3 class="workflow-title">Wake Up Campaign</h3>
+                        <p class="workflow-goal">Purge the database and optionally re-engage completely cold contacts.</p>
+                    </div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-icon step-icon-trigger">⚡</div>
+                            <strong>Trigger:</strong> No opens or web visits in 6 months
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">1</div>
+                            Send "We miss you" special offer email
+                        </li>
+                        <div class="step-delay">Wait 7 Days</div>
+                        <li class="step-item">
+                            <div class="step-icon">?</div>
+                            <strong>Condition:</strong> Clicked or Opened?
+                            <div class="branch">
+                                <div class="branch-item"><span class="branch-pill pill-yes">YES</span> Pull out of list, mark active</div>
+                                <div class="branch-item"><span class="branch-pill pill-no">NO</span> Mark as Disqualified / Unsubscribe</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Workflow 5: Deal Stage Automation -->
+                <div class="workflow-card">
+                    <div class="card-header">
+                        <div class="tag-group">
+                            <span class="tag sales">Sales</span>
+                            <span class="tag service">Service</span>
+                        </div>
+                        <h3 class="workflow-title">Deal Stage Pipeline</h3>
+                        <p class="workflow-goal">Run administrative handover tasks when a deal is closed won.</p>
+                    </div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-icon step-icon-trigger">⚡</div>
+                            <strong>Trigger:</strong> Deal stage shifts to "Closed Won"
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">1</div>
+                            Send automated "Next Steps" handoff to Client
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">2</div>
+                            Generate Onboarding Ticket in Service Hub Pipeline
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">3</div>
+                            Alert Customer Success Manager to begin onboarding
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Workflow 6: CSAT / NPS -->
+                <div class="workflow-card">
+                    <div class="card-header">
+                        <div class="tag-group">
+                            <span class="tag service">Service</span>
+                        </div>
+                        <h3 class="workflow-title">NPS / Satisfaction</h3>
+                        <p class="workflow-goal">Measure sentiment right after a positive or negative interaction.</p>
+                    </div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-icon step-icon-trigger">⚡</div>
+                            <strong>Trigger:</strong> Support ticket moved to "Closed"
+                        </li>
+                        <div class="step-delay">Wait 24 Hours</div>
+                        <li class="step-item">
+                            <div class="step-icon">1</div>
+                            Dispatch CSAT or NPS Survey via Email
+                        </li>
+                        <li class="step-item">
+                            <div class="step-icon">?</div>
+                            <strong>Condition:</strong> Is Score <= 6 (A Detractor)?
+                            <div class="branch">
+                                <div class="branch-item"><span class="branch-pill pill-yes">YES</span> Create urgent task for CS Rep to reach out & resolve</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
